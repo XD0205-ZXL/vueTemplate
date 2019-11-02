@@ -9,7 +9,7 @@
      -->
     <div style="position:relative;width:auto">
         <span class="asLabel" v-show="label" :style="{width:zlabelWidth}">{{label}}</span>
-        <input class="z-input" :class="{'readonlyIcon':readonlyFlag}" :readonly="readonlyFlag" @keyup.enter="enterEvent($event)" ref="zinput" type="text" :value="inputValue" :placeholder="placeholderText" v-on:input="throwValue($event)"/>
+        <input class="z-input" @click="clickEvent($evetn)" :class="{'readonlyIcon':readonlyFlag}" :readonly="readonlyFlag" @blur="blurEvent($event)" @keyup.enter="enterEvent($event)" ref="zinput" type="text" :value="inputValue" :placeholder="placeholderText" v-on:input="throwValue($event)"/>
         <span class="clearIcon" @click="clearValue" v-show="showClear"> X </span>
     </div>
 </template>
@@ -83,15 +83,26 @@ export default {
             // this.$emit("change","")  //这么写change事件也是不管用的
             this.$emit("input","")
         },
-        returnChangeval(event){
-            // this.$emit("change",event.target.value)
-        },
+        //@input事件
         throwValue(event){
             this.inputValue = event.target.value;
             this.$emit("input",event.target.value);
             this.$emit("change",event.target.value);
         },
-
+        //@blur事件
+        blurEvent(event){
+            if(this.readonlyFlag){
+                return;
+            }
+            this.$emit("blur",event.target.value);
+        },
+        //@click事件
+        clickEvent(evetn){
+            if(this.readonlyFlag){
+                return false;
+            }
+            this.$emit("click",event.target.value);
+        },
         //删除input中的内容
         enterEvent(e){
             this.$emit("enter",e.target.value);

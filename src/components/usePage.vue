@@ -4,8 +4,8 @@
         <div class="templateBox">
             <div class="template-item">
                 <h3 class="templateName">input组件的使用:</h3>
-                <zInput label="剧名:"  labelWidth="120" v-model="defaultName" placeholder="请输入剧名"></zInput>
-                <p>{{"使用v-model后的值:   "+defaultName}}</p>
+                <zInput label="剧名:" @click="clickVal" @blur="alertVal" labelWidth="120" v-model="defaultName" placeholder="请输入剧名"></zInput>
+                <p>{{"使用v-model后的值:" + defaultName}}</p>
             </div>
         </div>
     </div>
@@ -17,11 +17,16 @@ export default {
     components:{zInput},
     data(){
         return {
-            defaultName:'陈情令'
+            defaultName:'陈情令:'
         }
     },
     methods:{
-       
+        alertVal(val){
+            alert("blur事件 -- > 当前输入得值是 :  "+val)
+        },
+        clickVal(val){
+            alert("click事件 -- > 当前输入得值是 :  "+val)
+        }
     },
     mounted(){
        
@@ -39,6 +44,7 @@ export default {
     min-height: 200px;
     margin-bottom: 10px;
     padding-bottom: 10px;
+    /* box-shadow: 0px 0px 12px pink; */
     border-bottom: 1px solid pink;
 }
 </style>
