@@ -4,7 +4,7 @@
         <div class="templateBox">
             <div class="template-item">
                 <h3 class="templateName">input组件的使用:</h3>
-                <zInput label="剧名:" labelWidth="120" v-model="defaultName"></zInput>
+                <zInput label="剧名:"  labelWidth="120" v-model="defaultName" placeholder="请输入剧名"></zInput>
                 <p>{{"使用v-model后的值:   "+defaultName}}</p>
             </div>
         </div>
@@ -17,7 +17,7 @@ export default {
     components:{zInput},
     data(){
         return {
-            defaultName:'我们的幸福生活'
+            defaultName:'陈情令'
         }
     },
     methods:{
