@@ -11,7 +11,8 @@ export default {
 </script>
 
 <style>
-/* @import url("../static/font-awesome.css"); */
+@import url("../static/font-awesome.css");
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

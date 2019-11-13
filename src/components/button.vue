@@ -7,7 +7,7 @@
     5. 有click事假
     6. 
  -->
-    <div class="btnContent">
+    <div class="btnContent" @click="clickEvent">
         <i class="fa" :class="_typeConfig.iCls"></i>
         <span class="z_button" :class="_typeConfig.cls">{{btnText}}</span>
     </div>
@@ -42,6 +42,11 @@ export default {
             let _typeConfig = {};
             _typeConfig = Enum.buttonConfig[this._type];
             return _typeConfig;
+        }
+    },
+    methods:{
+        clickEvent(){
+            this.$emit("click");
         }
     }
 }

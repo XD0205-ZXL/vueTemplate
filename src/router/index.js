@@ -4,6 +4,8 @@ import HelloWorld from '@/components/$emit.vue'
 import DemoPage from '../components/demoPage.vue'
 import UsePage from '../components/usePage.vue'
 
+import Radio from "../components/radio.vue"; 
+
 Vue.use(Router)
 
 export default new Router({
@@ -22,6 +24,13 @@ export default new Router({
       path:'/usePage',
       name:UsePage,
       component:UsePage
+    },
+
+    {
+      path:'/radio',
+      name:Radio,
+      component:Radio
     }
+
   ]
 })
