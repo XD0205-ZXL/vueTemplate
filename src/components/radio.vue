@@ -8,10 +8,13 @@
 
          -->
         <label class="labelName" :style="{width:labelWidth + 'px'}">{{label}}:</label>
-        <div style="float:left" v-if="dataSource && dataSource.length > 0">
-            <span class="radioItem" v-for="(item,idx) in dataSource" :key="idx">
-                <span class="fa fa-circle-o"></span>
+        <div style="float:left" v-if="data && data.length > 0">
+           
+            <span :class="readonlyFlag?'readonlyIcon':''" class="radioItem" v-for="(item,idx) in data" :key="idx" @click="changeSelectitem(item)">
+                <span class="fa" :class="item.ck ? 'fa-dot-circle-o':'fa-circle-o'"></span>
                 <span>{{item.name}}</span>
+
+                <h1 :class="item.ck ? 'fa-dot-circle-o':'fa-circle-o'" class="fa faiCon">{{item.ck}}</h1>
             </span>
         </div>
     </div>
@@ -19,7 +22,7 @@
 
 <script>
 export default {
-    props:["label","dataSource","value"],
+    props:["label","dataSource","value","displayValue","readonly"],
     data(){
         return {
             data:[]
@@ -33,17 +36,78 @@ export default {
                 return 100
             }
         },
+        readonlyFlag(){
+            if(this.readonly == undefined){
+                return false
+            }else if(this.readonly === ""){
+                return true
+            }else if(this.readonly === false){
+                return false
+            }else {
+                return true
+            }
+        }
     },
     watch:{
-        dataSource(val){
-            console.log(val)
-            if(val && val.length > 0){
-                this.data = val
+        value(val){
+            this.setValue(val)
+        },
+        dataSource(newVal){ 
+            if(newVal && newVal.length > 0){
+                this.data = newVal
+            }
+        }
+    },
+    methods:{
+        clearVal(){
+            this.reSetval();
+            this.$emit("input","")
+        },
+        setValue(val){ //这个val代表的是v-model的
+            val !== null && val !== undefined && val !== "" ? val = val.toString():val = "";
+            //当val不为空（v-model了一个值的时候）得判断哪个是被选中的
+            //先给DataSource中的每一项加一个标识是否选中的ck属性
+            this.reSetval();
+            //选中值
+            this.data.forEach(item=>{
+                if(item[this.displayValue] && item[this.displayValue] == val ){
+                    item.ck = true
+                }
+            })
+        },
+        getValue(){
+            return this.value
+        },
+        changeSelectitem(item){
+            this.clearVal();
+            if(this.readonlyFlag){
+                return
+            }
+            this.reSetval();
+            debugger
+            item.ck = true; 
+            this.$emit('input',item[this.displayValue]);
+            this.$emit('click',item[this.displayValue]); 
+            this.$emit("change",item,this.data);
+            console.log(this.data)
+        },
+        reSetval(){
+            if(this.data && this.data.length > 0){
+                this.data.forEach(item => {
+                    item.ck = false;
+                });
             }
         }
     },
     mounted(){
-        console.log(this.value)
+        if(this.dataSource && this.dataSource.length > 0 ){
+            this.data = this.dataSource
+        };
+        if(this.value){
+            this.setValue(this.value)
+        }
+        
+
     }
 }
 </script>
@@ -52,13 +116,22 @@ export default {
 .labelName{
     width: 100px;
     float: left;
-    color: red;
     text-align: right;
-    border: 1px solid #ccc;
 }
 
 .radioItem{
     cursor: pointer;
+}
+
+.radioItem.readonlyIcon{
+    color: #ccc;
+}
+
+.faiCon{
+    width: 50px;
+    height: 50px;
+    border: 1px solid red;
+    display: inline-block;
 }
 
 </style>

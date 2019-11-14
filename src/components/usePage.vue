@@ -15,7 +15,7 @@
             </div>
             <div class="template-item">
                 <h3 class="templateName">radio组件的使用:</h3>
-                <zRadio v-model="name" label="性别" :data-source="sex"></zRadio>
+                <zRadio ref="sexradio" @click="changeInput" display-value="code" v-model="sexCode" label="性别" :data-source="sex"></zRadio>
                 <z-button @click="changeRadioData"></z-button>
             </div>
         </div>
@@ -32,15 +32,15 @@ export default {
         return {
             defaultName:'陈情令:',
             sex:[
-                {name:'男',code:0},
-                {name:'女',code:1}
+                {name:'男',code:21},
+                {name:'女',code:11}
             ],
-            name:'陈情令'
+            sexCode:''
         }
     },
     methods:{
         alertVal(val){
-            alert("blur事件 -- > 当前输入得值是 :  "+val)
+            // alert("blur事件 -- > 当前输入得值是 :  "+val)
         },
         clickVal(val){
             alert("click事件 -- > 当前输入得值是 :  "+val)
@@ -53,10 +53,15 @@ export default {
             alert("点击了修改按钮")
         },
         changeRadioData(){
-            this.sex = [
-                {name:'蓝忘机',code:0},
-                {name:'魏无羡',code:1}
-            ]
+            // this.sex = [
+            //     {name:'蓝忘机',code:0},
+            //     {name:'魏无羡',code:1}
+            // ],
+            this.sexCode = 11;
+            console.log(this.$refs.sexradio.getValue())
+        },
+        changeInput(val){
+            this.sexCode = val;
         }
     },
     mounted(){
@@ -72,7 +77,7 @@ export default {
 }
 
 .template-item{
-    min-height: 200px;
+    min-height: 100px;
     margin-bottom: 10px;
     padding-bottom: 10px;
     /* box-shadow: 0px 0px 12px pink; */

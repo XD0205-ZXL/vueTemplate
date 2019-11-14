@@ -9,7 +9,7 @@
      -->
     <div style="position:relative;width:auto">
         <span class="asLabel" v-show="label" :style="{width:zlabelWidth}">{{label}}</span>
-        <input class="z-input" @click="clickEvent($evetn)" :class="{'readonlyIcon':readonlyFlag}" :readonly="readonlyFlag" @blur="blurEvent($event)" @keyup.enter="enterEvent($event)" ref="zinput" type="text" :value="inputValue" :placeholder="placeholderText" v-on:input="throwValue($event)"/>
+        <input class="z-input" @click="clickEvent($event)" :class="{'readonlyIcon':readonlyFlag}" :readonly="readonlyFlag" @blur="blurEvent($event)" @keyup.enter="enterEvent($event)" ref="zinput" type="text" :value="inputValue" :placeholder="placeholderText" v-on:input="throwValue($event)"/>
         <span class="clearIcon" @click="clearValue" v-show="showClear"> X </span>
     </div>
 </template>
@@ -85,6 +85,7 @@ export default {
         },
         //@input事件
         throwValue(event){
+            debugger
             this.inputValue = event.target.value;
             this.$emit("input",event.target.value);
             this.$emit("change",event.target.value);
