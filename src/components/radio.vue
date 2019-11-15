@@ -9,12 +9,9 @@
          -->
         <label class="labelName" :style="{width:labelWidth + 'px'}">{{label}}:</label>
         <div style="float:left" v-if="data && data.length > 0">
-           
             <span :class="readonlyFlag?'readonlyIcon':''" class="radioItem" v-for="(item,idx) in data" :key="idx" @click="changeSelectitem(item)">
                 <span class="fa" :class="item.ck ? 'fa-dot-circle-o':'fa-circle-o'"></span>
                 <span>{{item.name}}</span>
-
-                <h1 :class="item.ck ? 'fa-dot-circle-o':'fa-circle-o'" class="fa faiCon">{{item.ck}}</h1>
             </span>
         </div>
     </div>
@@ -55,7 +52,8 @@ export default {
         dataSource(newVal){ 
             if(newVal && newVal.length > 0){
                 this.data = newVal
-            }
+            };
+            this.reSetval();
         }
     },
     methods:{
@@ -64,13 +62,15 @@ export default {
             this.$emit("input","")
         },
         setValue(val){ //这个val代表的是v-model的
+        let that = this;
+        debugger
             val !== null && val !== undefined && val !== "" ? val = val.toString():val = "";
             //当val不为空（v-model了一个值的时候）得判断哪个是被选中的
             //先给DataSource中的每一项加一个标识是否选中的ck属性
-            this.reSetval();
+            that.reSetval();
             //选中值
-            this.data.forEach(item=>{
-                if(item[this.displayValue] && item[this.displayValue] == val ){
+            that.data.forEach(item=>{
+                if(item[that.displayValue] && item[that.displayValue] == val ){
                     item.ck = true
                 }
             })
@@ -83,7 +83,6 @@ export default {
             if(this.readonlyFlag){
                 return
             }
-            this.reSetval();
             debugger
             item.ck = true; 
             this.$emit('input',item[this.displayValue]);
@@ -106,8 +105,7 @@ export default {
         if(this.value){
             this.setValue(this.value)
         }
-        
-
+        this.reSetval();
     }
 }
 </script>

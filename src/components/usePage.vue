@@ -53,12 +53,10 @@ export default {
             alert("点击了修改按钮")
         },
         changeRadioData(){
-            // this.sex = [
-            //     {name:'蓝忘机',code:0},
-            //     {name:'魏无羡',code:1}
-            // ],
-            this.sexCode = 11;
-            console.log(this.$refs.sexradio.getValue())
+            this.sex = [
+                {name:'蓝忘机',code:0},
+                {name:'魏无羡',code:1}
+            ]
         },
         changeInput(val){
             this.sexCode = val;
