@@ -15,8 +15,12 @@
             </div>
             <div class="template-item">
                 <h3 class="templateName">radio组件的使用:</h3>
-                <zRadio ref="sexradio" @click="changeInput" display-value="code" v-model="sexCode" label="性别" :data-source="sex"></zRadio>
-                <z-button @click="changeRadioData"></z-button>
+                <zRadio ref="sexradio" display-value="code" v-model="sexCode" label="性别" :data-source="sex"></zRadio>
+                <!-- <z-button @click="changeRadioData"></z-button> -->
+            </div>
+            <div class="template-item">
+                <h3 class="templateName">checkBox组件的使用:</h3>
+                <zCheckbox display-name="name" display-value="code" :data-source="checkArr" v-model="hoddys" label="爱好啊:"></zCheckbox>
             </div>
         </div>
     </div>
@@ -26,8 +30,9 @@
 import zInput from "./input.vue";
 import zButton from "./button.vue";
 import zRadio from "./radio.vue";
+import zCheckbox from "./checkBox.vue";
 export default {
-    components:{zInput,zButton,zRadio},
+    components:{zInput,zButton,zRadio,zCheckbox},
     data(){
         return {
             defaultName:'陈情令:',
@@ -35,7 +40,15 @@ export default {
                 {name:'男',code:21},
                 {name:'女',code:11}
             ],
-            sexCode:''
+            sexCode:'',
+            hoddys:'1',
+            checkArr:[
+                {name:'看书',code:'1'},
+                {name:'打篮球',code:'2'},
+                {name:'学习',code:'3'},
+                {name:'做饭',code:'4'},
+                {name:'打扫家',code:'5'},
+            ]
         }
     },
     methods:{
@@ -59,7 +72,7 @@ export default {
             ]
         },
         changeInput(val){
-            this.sexCode = val;
+            // this.sexCode = val;
         }
     },
     mounted(){

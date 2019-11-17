@@ -83,12 +83,10 @@ export default {
             if(this.readonlyFlag){
                 return
             }
-            debugger
             item.ck = true; 
             this.$emit('input',item[this.displayValue]);
-            this.$emit('click',item[this.displayValue]); 
+            // this.$emit('click',item[this.displayValue]); 
             this.$emit("change",item,this.data);
-            console.log(this.data)
         },
         reSetval(){
             if(this.data && this.data.length > 0){

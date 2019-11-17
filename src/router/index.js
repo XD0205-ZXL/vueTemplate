@@ -5,6 +5,7 @@ import DemoPage from '../components/demoPage.vue'
 import UsePage from '../components/usePage.vue'
 
 import Radio from "../components/radio.vue"; 
+import Checkbox from "../components/checkBox.vue";
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path:'/radio',
       name:Radio,
       component:Radio
+    },
+    {
+      path:'/checkbox',
+      name:Checkbox,
+      component:Checkbox
     }
 
   ]
