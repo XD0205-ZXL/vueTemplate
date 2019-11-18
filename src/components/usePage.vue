@@ -22,6 +22,10 @@
                 <h3 class="templateName">checkBox组件的使用:</h3>
                 <zCheckbox display-name="name" display-value="code" :data-source="checkArr" v-model="hoddys" label="爱好啊:"></zCheckbox>
             </div>
+            <div class="template-item">
+                <h3 class="templateName">Select组件的使用:</h3>
+                <zSelect @input="getNewDataSource" display-name="name" display-value="code" v-model="selectVal" :data-source="selectArr"></zSelect>
+            </div>
         </div>
     </div>
 </template>
@@ -31,8 +35,9 @@ import zInput from "./input.vue";
 import zButton from "./button.vue";
 import zRadio from "./radio.vue";
 import zCheckbox from "./checkBox.vue";
+import zSelect from "./select.vue";
 export default {
-    components:{zInput,zButton,zRadio,zCheckbox},
+    components:{zInput,zButton,zRadio,zCheckbox,zSelect},
     data(){
         return {
             defaultName:'陈情令:',
@@ -48,7 +53,13 @@ export default {
                 {name:'学习',code:'3'},
                 {name:'做饭',code:'4'},
                 {name:'打扫家',code:'5'},
-            ]
+            ],
+            selectArr:[
+                {name:'战战',code:'1'},
+                {name:'小飞侠',code:'2'},
+                {name:'小腰精',code:'3'},
+            ],
+            selectVal:'1,2'
         }
     },
     methods:{
@@ -73,6 +84,19 @@ export default {
         },
         changeInput(val){
             // this.sexCode = val;
+        },
+        //ajax改变select的数据源
+        getNewDataSource(val){
+            let searchKey = val;//搜索的关键字
+            let that = this;
+            setTimeout(function(){
+                    let newdataSource = [
+                    {name:'战战de小酒窝啊',code:'1'},
+                    {name:'小兔牙',code:'2'},
+                    {name:'人间星河',code:'3'},
+                ];
+                that.selectArr = newdataSource;
+            },1000)
         }
     },
     mounted(){
