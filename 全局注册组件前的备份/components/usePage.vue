@@ -26,6 +26,10 @@
                 <h3 class="templateName">Select组件的使用:</h3>
                 <zSelect @input="getNewDataSource" display-name="name" display-value="code" v-model="selectVal" :data-source="selectArr"></zSelect>
             </div>
+            <div class="template-item">
+                <h3 class="templateName">searchSelect组件的使用:</h3>
+                <zSearchSelect display-name="name" display-value="code" v-model="searchSelectVal" :opration="searchSelectOprs"></zSearchSelect>
+            </div>
         </div>
     </div>
 </template>
@@ -36,8 +40,9 @@ import zButton from "./button.vue";
 import zRadio from "./radio.vue";
 import zCheckbox from "./checkBox.vue";
 import zSelect from "./select.vue";
+import zSearchSelect  from "./searchSelect.vue";
 export default {
-    components:{zInput,zButton,zRadio,zCheckbox,zSelect},
+    components:{zInput,zButton,zRadio,zCheckbox,zSelect,zSearchSelect},
     data(){
         return {
             defaultName:'陈情令:',
@@ -59,7 +64,16 @@ export default {
                 {name:'小飞侠',code:'2'},
                 {name:'小腰精',code:'3'},
             ],
-            selectVal:'1,2'
+            selectVal:'1,2',
+            //解析下拉搜索 的数据
+            searchSelectVal:'',
+            searchSelectOprs:{
+                analysis(val){
+                    console.log('.......')
+                    console.log(val)
+                    console.log('.......')
+                }
+            }
         }
     },
     methods:{

@@ -90,8 +90,7 @@ module.exports = (env = {}) =>{
             port: "3001",
             proxy: {
                 '/api': {
-                    // target: 'http://admin.lenovouat.com/',
-                    target: 'http://127.0.0.1:3000/',
+                    target: 'http://admin.nec.lenovouat.cn/',
                     pathRewrite: {
                         "^/api": ""
                     },

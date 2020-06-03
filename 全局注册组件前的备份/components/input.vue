@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import $emitVue from '../page/$emit.vue';
+import $emitVue from './$emit.vue';
 export default {
     props:["label","labelWidth","value"],
     data(){
