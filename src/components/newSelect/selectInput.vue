@@ -12,7 +12,7 @@
         <div class="selectInput" @click="inputFocus" @mouseenter="showArr" @mouseleave="hideArr">
             <!-- 选中的选项 -->
             <selectItems :dataSource="selectedArr"></selectItems>
-            <input v-model="searchName" :readonly="readonlyTag" ref="inputDom" @click="showOption"  class="searchInput" :class="{'readonlyTag':readonlyTag}"/>
+            <input v-model="searchName" :readonly="readonlyTag" ref="inputDom" @click.stop="showOption"  class="searchInput" :class="{'readonlyTag':readonlyTag}"/>
             <i class="asBtn clearBtn fa fa-times-circle"></i>
             <i class="asBtn hasOption fa fa-chevron-down icon-del"></i>
             <div class="msgContent">
@@ -37,7 +37,8 @@ export default {
             data:[],
             showSelectOption:false,
             searchName:'',
-            bottomData:[]
+            bottomData:[],
+            clickBodyhideOption:true,
         }
     },
     watch:{
@@ -87,7 +88,6 @@ export default {
             return this.getSelectItem(this.data,this.displayValue).res;
         },
         buttomArray(){
-            debugger
             let that = this;
             if(that.searchName != ""){
                 return that.data.filter(item =>{
@@ -114,7 +114,8 @@ export default {
             }else{
                 this.showSelectOption = true;
                 this.$refs.inputDom.focus();
-            }
+            };
+            this.clickBodyhideOption = true;
         },
         hideSelect(){
 
@@ -180,7 +181,6 @@ export default {
                 if(item.ck == true){
                     arr.res.push(item);
                     if(displayValue){
-                        debugger
                         arr.vals.push(item[displayValue])
                     }
                 }
@@ -239,6 +239,12 @@ export default {
             this.init(this.dataSource);
         };
         this.setValue(this.value);
+        let that = this;
+        document.body.onclick=function(e){ 
+            console.log(e.target.className)
+            that.showSelectOption = false;
+            console.log(1)
+        }; 
     }
 }
 </script>

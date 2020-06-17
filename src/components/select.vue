@@ -114,8 +114,8 @@ export default {
 
 .selectTop{
     width: 100%;
-    min-height:100px;
-    border: 1px solid green; 
+    /* min-height:100px;
+    border: 1px solid green;  */
 }
 
 .keyWord{

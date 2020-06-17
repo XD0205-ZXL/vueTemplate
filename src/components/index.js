@@ -17,7 +17,10 @@ import ZSelect from "./select.vue";
 import ZRadio from "./radio.vue";
 import ZSearchSelect from "./searchSelect.vue";
 import ZShuttleBox from "./shuttleBox.vue";
-import zTable from "./table/table.vue";
+
+import Zselects from "./newSelect/selectInput.vue";
+import ZUpload from "./upload.vue";
+import ZTableList from "./table/table.vue";
 
 export default {
     install:function(Vue){
@@ -28,7 +31,9 @@ export default {
         Vue.component('ZRadio',ZRadio);
         Vue.component('ZSearchSelect',ZSearchSelect);
         Vue.component('ZShuttleBox',ZShuttleBox);
-        Vue.component('zTable',zTable)
+        Vue.component('Zselects',Zselects);
+        Vue.component('ZUpload',ZUpload);
+        Vue.component('ZTableList',ZTableList);
     }
 }
 

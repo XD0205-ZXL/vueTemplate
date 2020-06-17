@@ -8,7 +8,6 @@
          -->
         <label class="checkboxTitle" :style="{width:labelWidthVal + 'px'}">{{label}}</label>
         <span @click="changeSelect(item)" class="checkItem" v-for="(item,idx) in dataSource" :key="idx">
-            <span>哈哈哈：{{item}}：哈哈哈</span>
             <span>{{item[displayName]}}</span>
             <span class="checkIcon fa" :class="item.ck ? 'fa-check-square':'fa-square-o'"></span>
         </span>
@@ -59,7 +58,6 @@ export default {
             return vals;
         },
         setValue(val){
-            debugger
             let that = this;
             if(val != undefined && val != null && val.length >  0 ){
                 val = val.split(",");
@@ -79,7 +77,6 @@ export default {
         },
         initDatasource(){
             //循环数组 ，给他们加上class类名
-            debugger
             if(this.dataSource && this.dataSource.length > 0){
                 this.dataSource.forEach(item => {
                     item.ck = false;

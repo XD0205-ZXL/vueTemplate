@@ -22,19 +22,26 @@
                 <h3 class="templateName">checkBox组件的使用:</h3>
                 <zCheckbox display-name="name" display-value="code" :data-source="checkArr" v-model="hoddys" label="爱好啊:"></zCheckbox>
             </div>
-            <div class="template-item">
+            <!-- <div class="template-item">
                 <h3 class="templateName">Select组件的使用:</h3>
                 <zSelect @input="getNewDataSource" display-name="name" display-value="code" v-model="selectVal" :data-source="selectArr"></zSelect>
-            </div>
+            </div> -->
             <div class="template-item">
-                <h3 class="templateName">searchSelect组件的使用:</h3>
-                <zSearchSelect display-name="name" display-value="code" v-model="searchSelectVal" :opration="searchSelectOprs"></zSearchSelect>
+                <h3 class="templateName">searchSelect组件的使用222:</h3>
+                <!-- <zSearchSelect display-name="name" display-value="code" v-model="searchSelectVal" :opration="searchSelectOprs"></zSearchSelect> -->
+                <Zselects multiple displayName="name" v-model="selectval" displayValue="name" :dataSource="getAjaxData" labelWidth="100" labelName="测试名称:" msg="必填" tip="请输入正整数" readonly="false" enableInput></Zselects>
             </div>
 
             <div class="template-item">
                 <h3 class="templateName">table组件的使用:</h3>
-                <!-- <zTable :options="orderListOpt" :title="listTitle"></zTable> -->
+                <ZTableList title="编辑列表" ref='resourceManage_list_ref' :options='list_table_options'></ZTableList>
             </div>
+
+            <div class="template-item">
+                <h3 class="templateName">upload组件的使用:</h3>
+                <ZUpload label="图片上传:" labeWidth="120"></ZUpload>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -121,6 +128,73 @@ export default {
                         return {
                             data:data.data.data,
                             count:data.data.totalNum
+                        }
+                    }else{
+                        return {
+                            data:[],
+                            count:0
+                        }
+                    }
+                }
+            },
+            selectval:'韩烁,心爱',
+            getAjaxData:[
+                {name:'陈芊芊',msg:'你太虎了 。。。',code:'1'},
+                {name:'韩烁',msg:'我刚刚打的虎吗？',code:'2'},
+                {name:'心爱',msg:'伤她心我是万万不能',code:'3'},
+                {name:'初澈',msg:'花易落',code:'4'},
+                {name:'测试实测',msg:'测试实测 。。。',code:'5'},
+                {name:'不悔',msg:'我是杨不悔',code:'6'},
+                {name:'小昭',msg:'我是小昭',code:'7'},
+                {name:'易落',msg:'月难圆',code:'8 '},
+            ],
+            list_table_options:{
+                showCk:true,
+                // singleSelected:true,
+                map:[
+                    {key:"code",val:"<#编码#>"},
+                    {key:"title",val:"<#名称#>"},
+                    {key:'childType',val:'<#新闻类型#>',convert:this.formateNewsType},   
+                    {key:"code",val:"<#状态#>",convert:this.formateStatus},
+                    {key:"createBy",val:"<#创建人#>"},
+                    {key:"createTimeStr",val:"<#创建时间#>",type:"dateTime"},
+                ],
+                getUrl:() => {
+                    return "https://admin.nec.lenovouat.com/newsbk/brand/editlist?title=&status=&codeLike=&childType=&type=61&curPage=1&pageSize=10&ran=0.7539081243686234"
+                },
+                pageOption:{
+                    sizeKey:"pageSize",
+                    indexKey:"curPage",
+                    index:1,
+                    size:10
+                },
+                actions:[
+                    {
+                        key:"update",
+                        val:"<#编辑#>",
+                        action:this.edit
+                    },
+                    {
+                        key:"remove",
+                        val:"<#删除#>",
+                        action:this.removeItem
+                    },
+                    {
+                        key:"info",
+                        val:"<#详情#>",
+                        action:this.info
+                    },
+                    {
+                        key:"review",
+                        val:"<#预览#>",
+                        action:this.review
+                    }
+                ],
+                analysis:(data)=>{
+                    if(data && data.data && data.data.dataList){
+                        return {
+                            data:data.data.dataList,
+                            count:data.data.count
                         }
                     }else{
                         return {

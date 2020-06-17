@@ -6,12 +6,16 @@ import Radio from "../components/radio.vue";
 import Checkbox from "../components/checkBox.vue";
 import searchSelect from "../components/searchSelect.vue";
 
-import ShuttleBox from "../components/shuttleBox.vue"
-import Ztable from "../components/table/table.vue"
+import ShuttleBox from "../components/shuttleBox.vue";
 
 
 
-import TmdSelect from "../components/newSelect/usePages.vue"
+import TmdSelect from "../components/newSelect/usePages.vue";
+import TmdTable from "../components/table/useTable.vue";
+
+
+
+
 
 Vue.use(Router)
 export default new Router({
@@ -20,11 +24,6 @@ export default new Router({
       path:'/usePage',
       name:'UsePage',
       component:UsePage
-    },
-    {
-      path:'/ztable',
-      name:'Ztable',
-      component:Ztable
     },
     {
       path:'/radio',
@@ -52,6 +51,11 @@ export default new Router({
       path : '/TmdSelect',
       name : 'TmdSelect',
       component : TmdSelect
+    },
+    {
+      path :'/TmdTable',
+      name :'TmdTable',
+      component : TmdTable
     }
    
 
