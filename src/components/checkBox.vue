@@ -33,7 +33,7 @@ export default {
     },
     watch:{
         value(newVal){
-            this.initDatasource();
+            // this.initDatasource();
             this.setValue(newVal);
         },
         dataSource(newVal){
@@ -68,7 +68,6 @@ export default {
                         }
                     })
                 })
-                console.log(this.dataSource)
             }else{
                 this.dataSource.forEach(item=>{
                     item.ck = ""
@@ -98,7 +97,6 @@ export default {
 }
 
 .checkItem{
-    border: 1px solid red;
     cursor: pointer;
 }
 

@@ -13,8 +13,8 @@
             <!-- 选中的选项 -->
             <selectItems :dataSource="selectedArr"></selectItems>
             <input v-model="searchName" :readonly="readonlyTag" ref="inputDom" @click.stop="showOption"  class="searchInput" :class="{'readonlyTag':readonlyTag}"/>
-            <i class="asBtn clearBtn fa fa-times-circle"></i>
-            <i class="asBtn hasOption fa fa-chevron-down icon-del"></i>
+            <i v-if="selectedArr.length < 1" class="asBtn hasOption fa fa-chevron-down icon-del"></i>
+            <i v-else @click.stop="clearOption" class="asBtn clearBtn fa fa-times-circle"></i>
             <div class="msgContent">
                 <p class="msg" v-show="msg">{{msg}}</p>
                 <p class="tip" v-show="tip">{{tip}}</p>
@@ -94,16 +94,28 @@ export default {
                     return item[that.displayValue].indexOf(that.searchName) != -1
                 })
             };
-            console.log(that.data)
             return that.data;
         }
-
     },
     methods:{
+        clearOption(){
+            let neweArr = [];
+            this.data.forEach(item=>{
+                item.ck = false;
+                item.cls = "selectItem";
+                neweArr.push(item)
+            })
+            this.data = neweArr;
+            this.showSelectOption = false;
+            this.$emit("input",this.getSelectItem().vals.join(","));
+            this.$emit("change",this.getSelectItem().vals.join(","));
+
+            // this.onEmit()
+        },
         showOption(){
-            //不支持输入，只展示下拉选项
+            // 不支持输入，只展示下拉选项
             if(this.enableInputTag){
-                
+                this.showSelectOption = true
             }else{
                 return
             }
@@ -145,7 +157,6 @@ export default {
         init(val){
             let arr = this.cloneObj(val);
             this.data = this.addPrimaryAndCk(arr);
-            console.log(this.data)
         },
         resetData(){
             this.data.map(item=>{
@@ -240,11 +251,10 @@ export default {
         };
         this.setValue(this.value);
         let that = this;
-        document.body.onclick=function(e){ 
-            console.log(e.target.className)
-            that.showSelectOption = false;
-            console.log(1)
-        }; 
+        // document.body.onclick=function(e){ 
+        //     that.showSelectOption = false;
+        //     e.stopPropagation();
+        // }; 
     }
 }
 </script>
@@ -292,7 +302,7 @@ export default {
     position: absolute;
     top: 9px;
     right: 0;
-    display: none;
+    /* display: none; */
 }
 .hasOption{
     position: absolute;

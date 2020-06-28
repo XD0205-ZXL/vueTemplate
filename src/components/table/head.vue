@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th v-if="showCk">
+                {{ck}}
                 <input v-if="!singleSelected" type="checkbox" :checked="ck" v-show="showCk" @click="selectAll"/>
             </th>
 
@@ -18,7 +19,9 @@
 </template>
 
 <script>
-import tool from "../../../core/tool.js";
+// import CommonUtil from '@util';
+import CommonUtil from "../../../core/tool.js"
+
 export default {
     props:['showCk','singleSelected','originCols','cols','actions','ck'],
     data(){
@@ -26,9 +29,14 @@ export default {
 
         }
     },
+    watch:{
+        ck:function(val){
+            console.log(val)
+        }
+    },
     computed:{
         defaultOriginCols(){
-            return tool.object.addPrimaryAndCk(tool.object.cloneObj(this.originCols),true);
+            return CommonUtil.object.addPrimaryAndCk(CommonUtil.object.cloneObj(this.originCols),true);
         }
     },
     methods:{
@@ -51,6 +59,7 @@ thead th{
     line-height: 36px;
     background-color: #eaeaea;
     font-weight: 600;
+    padding: 10px;
 }
 </style>
 

@@ -20,6 +20,7 @@ import ZShuttleBox from "./shuttleBox.vue";
 
 import Zselects from "./newSelect/selectInput.vue";
 import ZUpload from "./upload.vue";
+import Zdate from "./date/date.vue";
 import ZTableList from "./table/table.vue";
 
 export default {
@@ -33,6 +34,7 @@ export default {
         Vue.component('ZShuttleBox',ZShuttleBox);
         Vue.component('Zselects',Zselects);
         Vue.component('ZUpload',ZUpload);
+        Vue.component('Zdate',Zdate)
         Vue.component('ZTableList',ZTableList);
     }
 }

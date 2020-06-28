@@ -62,8 +62,8 @@ export default {
             this.$emit("input","")
         },
         setValue(val){ //这个val代表的是v-model的
-        let that = this;
-        debugger
+            let that = this;
+            
             val !== null && val !== undefined && val !== "" ? val = val.toString():val = "";
             //当val不为空（v-model了一个值的时候）得判断哪个是被选中的
             //先给DataSource中的每一项加一个标识是否选中的ck属性
@@ -103,7 +103,7 @@ export default {
         if(this.value){
             this.setValue(this.value)
         }
-        this.reSetval();
+        // this.reSetval();
     }
 }
 </script>

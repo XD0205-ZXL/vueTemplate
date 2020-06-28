@@ -29,6 +29,7 @@
             <div class="template-item">
                 <h3 class="templateName">searchSelect组件的使用222:</h3>
                 <!-- <zSearchSelect display-name="name" display-value="code" v-model="searchSelectVal" :opration="searchSelectOprs"></zSearchSelect> -->
+                <p>选择的值是：{{selectval}}</p>
                 <Zselects multiple displayName="name" v-model="selectval" displayValue="name" :dataSource="getAjaxData" labelWidth="100" labelName="测试名称:" msg="必填" tip="请输入正整数" readonly="false" enableInput></Zselects>
             </div>
 
@@ -38,8 +39,13 @@
             </div>
 
             <div class="template-item">
+                <h3 class="templateName">Date组件的使用:</h3>
+                <Zdate label="创建日期:" labelWidth="120"></Zdate>
+            </div>
+
+            <div class="template-item">
                 <h3 class="templateName">upload组件的使用:</h3>
-                <ZUpload label="图片上传:" labeWidth="120"></ZUpload>
+                <ZUpload label="图片上传:" labelWidth="120" uploadOptions="uploadOptions"></ZUpload>
             </div>
             
         </div>
@@ -57,36 +63,32 @@ export default {
     // components:{zInput,zButton,zRadio,zCheckbox,zSelect,zSearchSelect},
     data(){
         return {
-            defaultName:'陈情令:',
+            defaultName:'陈情:',
             sex:[
                 {name:'男',code:21},
                 {name:'女',code:11}
             ],
-            sexCode:'',
-            hoddys:'1',
+            sexCode:'21',
+            hoddys:'505',
             checkArr:[
-                {name:'看书',code:'1'},
-                {name:'打篮球',code:'2'},
-                {name:'学习',code:'3'},
-                {name:'做饭',code:'4'},
-                {name:'打扫家',code:'5'},
+                {name:'看书',code:'101'},
+                {name:'打篮球',code:'202'},
+                {name:'学习',code:'303'},
+                {name:'做饭',code:'4404'},
+                {name:'打扫家',code:'505'},
             ],
             selectArr:[
                 {name:'战战',code:'1'},
                 {name:'小飞侠',code:'2'},
-                {name:'小腰精',code:'3'},
             ],
             selectVal:'1,2',
             //解析下拉搜索 的数据
             searchSelectVal:'',
             searchSelectOprs:{
                 analysis(val){
-                    console.log('.......')
                     console.log(val)
-                    console.log('.......')
                 }
             },
-
 
             listTitle:'订单列表',
             orderListOpt:{
@@ -137,11 +139,11 @@ export default {
                     }
                 }
             },
-            selectval:'韩烁,心爱',
+            selectval:'小烁,心爱',
             getAjaxData:[
-                {name:'陈芊芊',msg:'你太虎了 。。。',code:'1'},
-                {name:'韩烁',msg:'我刚刚打的虎吗？',code:'2'},
-                {name:'心爱',msg:'伤她心我是万万不能',code:'3'},
+                {name:'芊芊',msg:'你太虎了 。。。',code:'1'},
+                {name:'小烁',msg:'我刚刚打的虎吗？',code:'2'},
+                {name:'心爱',msg:'我是万万不能',code:'3'},
                 {name:'初澈',msg:'花易落',code:'4'},
                 {name:'测试实测',msg:'测试实测 。。。',code:'5'},
                 {name:'不悔',msg:'我是杨不悔',code:'6'},
@@ -202,6 +204,13 @@ export default {
                             count:0
                         }
                     }
+                }
+            },
+            uploadOptions:{
+                type:'png,jpg',
+                size:500,
+                analysis:function(data){
+                    console.log(data)
                 }
             }
         }

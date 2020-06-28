@@ -1,110 +1,81 @@
-let path = require('path');
-let webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require("path");
+const argv = require('yargs-parser')(process.argv.slice(2));
+const _mode = argv.mode || 'development';
+const _mergeConfig = require(`./config/webpack.${_mode}`);
+const merge = require('webpack-merge');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const webpack = require('webpack');
 
-module.exports = (env = {}) =>{
-    console.log(`------------------- ${env.Generative?'生产':'开发'}环境 -------------------`);
-    let plugins = (module.exports.plugins || []).concat([
-        new CleanWebpackPlugin(['dist']),
-        new webpack.optimize.UglifyJsPlugin({
-            // sourceMap: true,
-            // compress: {
-            //   warnings: false
-            // }
-        }),
-        new webpack.LoaderOptionsPlugin({
-            minimize: true
-        })
-    ])
-    if(!env.Generative){
-        plugins = [];
-    }
-    plugins.push(new CopyWebpackPlugin([{
-        from: './src/static',
-        to: 'static'
-    }]));
-    plugins.push(new HtmlWebpackPlugin({template: './src/index.html'}));
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-    return {
-        entry: './src/main.js',//入口
-        output: {
-            path: path.resolve(__dirname, './dist'),//输出结果
-            // publicPath: evn.production ? './' : '/', //文件路径
-            filename: '[name].js',
-            chunkFilename: '[id].chunk.js'
-        },
-        module: {
-            rules: [
-                //  使用vue-loader 加载 .vue 结尾的文件
-                {
-                    test: /\.vue$/,
-                    loader: 'vue-loader',
-                    options: {
-                        loaders: {
-                        }
-                        // other vue-loader options go here
-                    }
-                },
-                // 使用babel 加载 .js 结尾的文件
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                    exclude: /node_modules/
-                },
-                // 加载图标
-                {
-                    test: /\.(png|jpg|gif|svg)$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]?[hash]'
-                    }
-                },
-                //加载css
-                {
-                    test: /\.css$/,
-                    loader: "style-loader!css-loader",
-                    exclude: /node_modules/
-                },
-                {
-                    test: /\.scss$/,
-                    loader: "style-loader!css-loader!sass-loader!"
-                },
-                {
-                    test: /\.html$/,
-                    loader: 'html-loader',
-                    options: {
-                        minimize: false
-                    }
-                }
-            ]
-        },
-        resolve: {
-            alias: {
-                'vue$': 'vue/dist/vue.esm.js'
-            }
-        },
-        devServer: {
-            inline: true, //检测文件变化，实时构建并刷新浏览器
-            port: "3001",
-            proxy: {
-                '/api': {
-                    target: 'http://admin.nec.lenovouat.cn/',
-                    pathRewrite: {
-                        "^/api": ""
+
+let webpackConfig = {
+    entry: ['./src/main.js'],
+    output: {
+        path: path.resolve(__dirname, './dist'),//输出结果
+        filename: 'scripts/[name].js',
+        chunkFilename: 'scripts/[id].chunk.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
                     },
-                    secure: false,
-                    changeOrigin: true
+                    presets: ['es2015'],
+                    plugins: ['transform-runtime', 'transform-object-rest-spread']
                 },
             },
-            //404 页面返回 index.html
-            historyApiFallback: true,
-        },
-        performance: {
-            hints: false
-        },
-        plugins:plugins,
-        devtool: '#eval-source-map'//开发模式下更方便定位错误
-    }
-}
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]?[hash]'
+                }
+            },
+            {
+                test: /\.(woff|woff2|svg|eot|ttf)\??.*$/,
+                loader:'url-loader',options:{name:'fonts/[name].[hash:8].[ext]'}//项目设置打包到dist下的fonts文件夹下
+            }
+        ]
+    },
+    plugins: [
+        new VueLoaderPlugin(),
+        new webpack.ProvidePlugin({
+            "_global_object": [path.resolve(__dirname, "./src/static/js/event.js"), 'default']
+        }),
+        new HtmlWebpackPlugin({
+            filename:"./index.html",  
+            template: './src/index.ejs',
+            // chunks: ['index','common','vender','runtime'],
+            envi:argv.envi
+        }),
+    ],
+    resolve: {
+        extensions: ['.vue', '.js', '.json'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js',
+
+            // "@myCoreUILib":path.resolve(__dirname,"../../xw-vue-git/Core_UI_Lib"),
+            // "@CoreSrc":path.resolve(__dirname,"../../xw-vue-git/admin/src"),
+            // "@CoreUILib":path.resolve(__dirname,"../../xw-vue-git/admin/src/core/comps"),
+
+
+            "@CoreUILib":path.resolve(__dirname,"./src/core/le-components"),
+            "@util":path.resolve(__dirname,"./src/core/tool/commonUtil.js"),
+            "@service":path.resolve(__dirname,"./src/service"),
+            "@store":path.resolve(__dirname,"./src/store"),
+            "@api":path.resolve(__dirname,"./src/api"),
+            "@pages":path.resolve(__dirname,"./src/pages")
+        }
+    },
+};
+module.exports = merge(webpackConfig, _mergeConfig);

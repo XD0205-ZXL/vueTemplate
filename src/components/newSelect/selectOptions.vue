@@ -22,7 +22,6 @@ export default {
         }
     },
     mounted(){
-        console.log(this.dataSource)
     }
 }
 </script>
@@ -36,6 +35,7 @@ export default {
     z-index: 1;
     position: absolute;
     top: 100%;
+    border:1px solid #ddd;
 }
 .selectItem{
     line-height: 30px;

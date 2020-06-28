@@ -4,24 +4,30 @@
         <div class="tableContent">
             <table>
                 <tmdHead @clickHeadCheckbox="optHeadCheckbox" :showCk="showCk" :singleSelected="singleSelected" :originCols="originCols" :cols="state.cols" :actions="actions" :ck="state.ck"></tmdHead>
+                <tmdBody ref="tmdBody" @clickBodyCheckbox="optBodyCheckbox" :showCk="showCk" :singleSelected="singleSelected" :actions="actions" :ck="state.ck" :data="state.data" :cols="state.cols"></tmdBody>
             </table>
+            <tmdPaging @getPreDatas="getPreData" @getNextDatas="getNextData" @getAppointDatas="getAppointData" :curPage="state.pageOption.index" :count="state.pageOption.count" :totle="state.pageOption.total"></tmdPaging>
         </div>
     </div>
 </template>
 
 <script>
-import tool from "../../../core/tool.js";
+import CommonUtil from "../../../core/leCompsTool.js";
+// import CommonUtil from '@util';
+
 import tmdHead from "./head.vue";
+import tmdBody from "./body.vue";
+import tmdPaging from "./paging.vue";
 export default {
     props:['title','options'],
-    components:{tmdHead},
+    components:{tmdHead,tmdBody,tmdPaging},
     data(){
         return {
             state:{
                 data:[],
-                ck:false,//是否选中多选框
+                ck:true,//是否选中多选框
                 cols:this.options.map,
-                options:{
+                pageOption:{
                     index:this.options.pageOption.index?this.options.pageOption.index:1,
                     size:this.options.pageOption.size?this.options.pageOption.size:10,
                     count:0,
@@ -46,7 +52,7 @@ export default {
             return this.options.url;
         },
         originCols(){
-            return tool.object.cloneObj(this.options.map);
+            return CommonUtil.object.cloneObj(this.options.map);
         }
     },
     methods:{
@@ -55,7 +61,42 @@ export default {
         //然后在父级重新的把数据传递给子级，从而完成子级数据的变化
         optHeadCheckbox(val){
             this.state.ck = val.ck;
+            //val为true的话 就选中所有的数据
+            if(this.state.ck){
+                this.state.data.forEach(item => {
+                    item.ck = true;
+                });
+            }else{
+                this.state.data.forEach(item => {
+                    item.ck = false;
+                });
+            }
         },
+        // optBodyCheckbox(bodyData){
+        //     let selectItems = this.$refs.tmdBody.getCheckedItems();
+        //     let ckFlg = selectItems.length === this.state.data.length ? true :false;
+        //     this.state = {
+        //         data : bodyData,
+        //         ck:ckFlg,
+        //         cols:this.options.map,
+        //         pageOption:this.state.pageOption
+        //     }
+        // }, 
+        optBodyCheckbox(bodyCurclickItem){
+            this.state.data.forEach(item => {
+                if(bodyCurclickItem.__tmpId == item.__tmpId){
+                    item.ck = !bodyCurclickItem.ck;
+                }
+            });
+            let selectItems = this.getCheckedItems();
+            let ckFlg = selectItems.length === this.state.data.length ? true :false;
+            this.state = {
+                data : this.state.data,
+                ck:ckFlg,
+                cols:this.options.map,
+                pageOption:this.state.pageOption
+            }
+        },  
         //获取数据源
         getData(pageIndex){
             if(this.isLoading){
@@ -66,7 +107,7 @@ export default {
                 pageIndex = 1; //默认加载第一页的数据
             };
             let url = this.options.getUrl();
-            let size = this.state.options.size;
+            let size = this.state.pageOption.size;
             if(this.url === ""){
                 console.log("<#无有效的url#>!");
                 return;
@@ -74,7 +115,7 @@ export default {
             //如果有url的话 就拼接参数
             let character =  url.indexOf('?') === -1?"?":"&";
             url = url + character + this.options.pageOption.indexKey + '=' + pageIndex + "&" +
-                this.options.pageOption.sizeKey + '=' + this.state.options.size;
+                this.options.pageOption.sizeKey + '=' + this.state.pageOption.size;
                 this.ajax.getFetch(url).then(data=>{
                 this.isLoading = false;
                 let res = {};
@@ -86,30 +127,34 @@ export default {
                 };
                 //把数组继续解析，然后计算出 总条数，页数，
                 if(res.data && res.data instanceof Array && res.data.length >0){
-                    let arr = tool.object.addPrimaryAndCk(res.data);
-                    let total = -1;
-                    if(parseInt(data.count)%size == 0){
-                        total = parseInt(data.count)/size;
+                    let arr = CommonUtil.object.addPrimaryAndCk(res.data);
+                    // let total = -1;
+                    let total = 0;
+                    debugger
+                    if(parseInt(data.data.count)%size == 0){
+                        total = parseInt(data.data.count)/size;
                     }else{
-                        parseInt(data.count)/size + 1;
+                        total = parseInt(data.data.count/size + 1);
                     };
+                    
                     this.state = {
                         data : arr,
                         cols:this.state.cols,
                         ck:false,
                         pageOption:{
-                            index:index,
+                            index:pageIndex,
                             count:res.count,
                             total:total,
                             size:size
                         }
-                    }
+                    };
+                    console.log(this.state)
                 }else{
                     this.noResultCb();
                     console.log("<#数据源为空或者检查analysis, getUrl, pageOption参数!#>");
                 };
             }).catch(error=>{
-                // alert(error);
+                // alert(error.data);
                 this.noResultCb();
             })
         },
@@ -133,7 +178,7 @@ export default {
             if(index){
                 this.getData(index)
             }else{
-                this.getData(this.state.options.index)
+                this.getData(this.state.pageOption.index)
             }
         },
         getParams(){
@@ -144,10 +189,35 @@ export default {
         },
         searchCurrentIndex(){
             this.search(this.getParams.index);
+        },
+        //获取指定页数的数据
+        getAppointData(val){
+            this.state.pageOption.index = val;
+            this.search();
+        },
+        //上一页
+        getPreData(){
+            this.state.pageOption.index --;
+            this.search();
+        },
+        //下一页
+        getNextData(){
+            this.state.pageOption.index ++;
+            this.search();
+        },
+        //获取body中选中的数据
+        getCheckedItems(){
+            let items = [];
+             this.state.data.forEach(item => {
+                if(item.ck){
+                    items.push(item)
+                };
+            });
+            return items;
         }
     },
     mounted(){
-        this.getData(this.state.options.index)
+        this.getData(this.state.pageOption.index);
     }
 }
 </script>
@@ -171,5 +241,6 @@ table{
     width: 100%;
     min-height: 300px;
     border:1px solid red;
+    border-collapse: collapse;
 }
 </style>

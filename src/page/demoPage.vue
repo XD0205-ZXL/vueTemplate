@@ -200,7 +200,6 @@ layui.use(['tree', 'util','table'], function(){
       var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据
       
       layer.alert(JSON.stringify(checkedData), {shade:0});
-      console.log(checkedData);
     }
     ,setChecked: function(){
         let arr = [2,3,4]
